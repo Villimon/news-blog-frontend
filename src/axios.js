@@ -3,7 +3,8 @@ import axios from 'axios'
 
 
 const instance = axios.create({
-    baseURL: 'http://localhost:3003'
+    // baseURL: 'http://localhost:3003'
+    baseURL: process.env.REACT_APP_API_URL
 })
 
 // на проверку есть ли токен или нет 
