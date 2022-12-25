@@ -19,9 +19,7 @@ export const Login = () => {
   // Показывает авторизован ли я или нет 
   const isAuth = useSelector(selectIsAuth)
 
-  useEffect(() => {
 
-  })
 
   const { register, handleSubmit, setError, formState: { errors, isValid } } = useForm({
     defaultValues: {

@@ -42,6 +42,8 @@ export const AddPost = () => {
     }
   }, [])
 
+  console.log('sad')
+
   const handleChangeFile = async (e) => {
     try {
       const formData = new FormData()
@@ -119,6 +121,7 @@ export const AddPost = () => {
             Удалить
           </Button>
           <img className={styles.image} src={`${process.env.REACT_APP_API_URL}${imageUrl}`} alt="Uploaded" />
+          {/* <img className={styles.image} src={`http://localhost:3003${imageUrl}`} alt="Uploaded" /> */}
         </>
       )}
 

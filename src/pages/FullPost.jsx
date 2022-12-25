@@ -25,7 +25,6 @@ export const FullPost = () => {
       })
   }, [])
 
-  console.log(data);
 
   if (isLoading) {
     return <Post isLoading={isLoading} isFullPost />
@@ -38,6 +37,7 @@ export const FullPost = () => {
         id={data._id}
         title={data.title}
         imageUrl={data.imageUrl ? `${process.env.REACT_APP_API_URL}${data.imageUrl}` : ''}
+        // imageUrl={data.imageUrl ? `http://localhost:3003${data.imageUrl}` : ''}
         author={data.author}
         createdAt={data.createdAt}
         viewsCount={data.viewCount}

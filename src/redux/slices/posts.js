@@ -1,12 +1,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from '../../axios'
 
-export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
-    const { data } = await axios.get('/posts')
+export const fetchPosts = createAsyncThunk('posts/fetchPosts', async (query = '') => {
+    const { data } = await axios.get(`/posts?section=${query}`)
     return data
 })
 export const fetchTags = createAsyncThunk('posts/fetchTags', async () => {
     const { data } = await axios.get('/tags')
+    return data
+})
+export const fetchTag = createAsyncThunk('posts/fetchTag', async (tag) => {
+    const { data } = await axios.get(`/tags/${tag}`)
     return data
 })
 export const fetchRemovePost = createAsyncThunk('posts/fetchRemovePost', async (id) =>
@@ -23,6 +27,7 @@ const initialState = {
         items: [],
         status: 'loading'
     },
+
 }
 
 
@@ -61,7 +66,20 @@ const postsSlice = createSlice({
         [fetchRemovePost.pending]: (state, actions) => {
             state.posts.items = state.posts.items.filter(obj => obj._id !== actions.meta.arg)
             state.tags.status = 'loading'
-        }
+        },
+        // Получение статей по тегу
+        [fetchTag.pending]: (state) => {
+            state.posts.items = []
+            state.posts.status = 'loading'
+        },
+        [fetchTag.fulfilled]: (state, actions) => {
+            state.posts.items = actions.payload
+            state.posts.status = 'loaded'
+        },
+        [fetchTag.rejected]: (state) => {
+            state.posts.items = []
+            state.posts.status = 'error'
+        },
     }
 })
 

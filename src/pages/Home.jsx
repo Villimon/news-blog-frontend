@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -9,27 +9,56 @@ import { TagsBlock } from '../components/TagsBlock';
 import { CommentsBlock } from '../components/CommentsBlock';
 
 import { fetchPosts, fetchTags } from '../redux/slices/posts';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const Home = () => {
+  const [tag, setTag] = useState(0)
 
+  const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch()
+
   const userData = useSelector(state => state.auth.data)
   const { posts, tags } = useSelector(state => state.posts)
 
   const isPostsLoading = posts.status === 'loading'
   const isTagsLoading = tags.status === 'loading'
 
+
+  const goToPopularityPosts = () => {
+    navigate({
+      pathname: '/',
+      search: '?section=recommended'
+    });
+    setTag(1)
+  }
+  const goToNewPosts = () => {
+    navigate({
+      pathname: '/',
+    });
+    setTag(0)
+  }
+
   useEffect(() => {
-    dispatch(fetchPosts())
+    const query = new URLSearchParams(location.search);
+    const querySection = query.get("section");
+
+    if (querySection) {
+      dispatch(fetchPosts(querySection))
+      setTag(1)
+    } else {
+      dispatch(fetchPosts())
+    }
     dispatch(fetchTags())
-  }, [])
+  }, [tag]);
+
 
 
   return (
     <>
-      <Tabs style={{ marginBottom: 15 }} value={0} aria-label="basic tabs example">
-        <Tab label="Новые" />
-        <Tab label="Популярные" />
+      <Tabs style={{ marginBottom: 15 }} value={tag} aria-label="basic tabs example">
+        <Tab label="Новые" onClick={goToNewPosts} />
+        <Tab label="Популярные" onClick={goToPopularityPosts} />
       </Tabs>
       <Grid container spacing={4}>
         <Grid xs={8} item>
@@ -40,13 +69,13 @@ export const Home = () => {
                 _id={post._id}
                 title={post.title}
                 imageUrl={post.imageUrl ? `${process.env.REACT_APP_API_URL}${post.imageUrl}` : ''}
+                // imageUrl={post.imageUrl ? `http://localhost:3003${post.imageUrl}` : ''}
                 author={post.author}
                 createdAt={post.createdAt}
                 viewsCount={post.viewCount}
                 commentsCount={3}
                 tags={post.tags}
                 isEditable={userData?._id === post.author._id}
-
               />
           )}
         </Grid>
