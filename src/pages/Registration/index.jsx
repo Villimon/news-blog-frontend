@@ -71,6 +71,7 @@ export const Registration = () => {
         <TextField className={styles.field}
           label="Пароль"
           fullWidth
+          type='password'
           error={Boolean(errors.password?.message)}
           helperText={errors.password?.message}
           {...register('password', { required: 'Укажите пароль' })}

@@ -18,12 +18,31 @@ export const fetchRemovePost = createAsyncThunk('posts/fetchRemovePost', async (
 )
 
 
+export const fetchCreateComment = createAsyncThunk('posts/fetchCreateComment', async (params) => {
+    const { values, id } = params
+    const { data } = await axios.post(`/posts/${id}/comments`, values)
+
+    return data
+})
+
+export const fetchComments = createAsyncThunk('posts/fetchComments', async () => {
+    const { data } = await axios.get(`/comments`,)
+    return data
+})
+export const fetchRemoveComments = createAsyncThunk('posts/fetchRemoveComments', async (id) => {
+    await axios.delete(`/comments/${id}`,)
+})
+
 const initialState = {
     posts: {
         items: [],
         status: 'loading'
     },
     tags: {
+        items: [],
+        status: 'loading'
+    },
+    comments: {
         items: [],
         status: 'loading'
     },
@@ -67,6 +86,12 @@ const postsSlice = createSlice({
             state.posts.items = state.posts.items.filter(obj => obj._id !== actions.meta.arg)
             state.tags.status = 'loading'
         },
+
+        // Удаление комментария
+        [fetchRemoveComments.pending]: (state, actions) => {
+            state.comments.items = [state.comments.items].filter(obj => obj._id !== actions.meta.arg)
+            state.comments.status = 'loading'
+        },
         // Получение статей по тегу
         [fetchTag.pending]: (state) => {
             state.posts.items = []
@@ -80,6 +105,33 @@ const postsSlice = createSlice({
             state.posts.items = []
             state.posts.status = 'error'
         },
+        //comments
+
+
+        [fetchCreateComment.pending]: (state) => {
+            state.comments.items = []
+            state.comments.status = 'loading'
+        },
+        [fetchCreateComment.fulfilled]: (state, actions) => {
+            state.comments.items = actions.payload
+            state.comments.status = 'loaded'
+        },
+        [fetchCreateComment.rejected]: (state) => {
+            state.comments.items = []
+            state.comments.status = 'error'
+        },
+        [fetchComments.pending]: (state) => {
+            state.comments.items = []
+            state.comments.status = 'loading'
+        },
+        [fetchComments.fulfilled]: (state, actions) => {
+            state.comments.items = actions.payload
+            state.comments.status = 'loaded'
+        },
+        [fetchComments.rejected]: (state) => {
+            state.comments.items = []
+            state.comments.status = 'error'
+        }
     }
 })
 

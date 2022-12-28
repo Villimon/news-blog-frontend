@@ -42,7 +42,6 @@ export const AddPost = () => {
     }
   }, [])
 
-  console.log('sad')
 
   const handleChangeFile = async (e) => {
     try {

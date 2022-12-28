@@ -41,6 +41,7 @@ export const Post = ({
     }
   };
 
+
   return (
     <div className={clsx(styles.root, { [styles.rootFull]: isFullPost })}>
       {isEditable && (

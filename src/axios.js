@@ -3,9 +3,11 @@ import axios from 'axios'
 
 
 const instance = axios.create({
-    // baseURL: 'https://news-blog-backend.vercel.app'
-    // baseURL: 'http://localhost:3003'
-    baseURL: process.env.REACT_APP_API_URL
+    // baseURL: 'http://localhost:3003',
+    baseURL: process.env.REACT_APP_API_URL,
+    headers: {
+        "Content-Type": "application/json"
+    }
 })
 
 

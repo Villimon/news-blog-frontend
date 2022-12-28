@@ -6,9 +6,8 @@ import Grid from '@mui/material/Grid';
 
 import { Post } from '../components/Post';
 import { TagsBlock } from '../components/TagsBlock';
-import { CommentsBlock } from '../components/CommentsBlock';
 
-import { fetchPosts, fetchTags } from '../redux/slices/posts';
+import { fetchComments, fetchPosts, fetchTags } from '../redux/slices/posts';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export const Home = () => {
@@ -19,7 +18,13 @@ export const Home = () => {
   const dispatch = useDispatch()
 
   const userData = useSelector(state => state.auth.data)
-  const { posts, tags } = useSelector(state => state.posts)
+  const { posts, tags, comments } = useSelector(state => state.posts)
+
+
+  useEffect(() => {
+    dispatch(fetchComments())
+  }, [])
+
 
   const isPostsLoading = posts.status === 'loading'
   const isTagsLoading = tags.status === 'loading'
@@ -52,6 +57,10 @@ export const Home = () => {
     dispatch(fetchTags())
   }, [tag]);
 
+  const filterComments = (postId) => {
+    const arr = comments.items.filter(com => com.postId === postId);
+    return arr.length
+  }
 
 
   return (
@@ -66,6 +75,7 @@ export const Home = () => {
             isPostsLoading
               ? <Post key={index} isLoading={true} />
               : <Post
+                key={post._id}
                 _id={post._id}
                 title={post.title}
                 imageUrl={post.imageUrl ? `${process.env.REACT_APP_API_URL}${post.imageUrl}` : ''}
@@ -73,7 +83,7 @@ export const Home = () => {
                 author={post.author}
                 createdAt={post.createdAt}
                 viewsCount={post.viewCount}
-                commentsCount={3}
+                commentsCount={filterComments(post._id)}
                 tags={post.tags}
                 isEditable={userData?._id === post.author._id}
               />
@@ -81,7 +91,7 @@ export const Home = () => {
         </Grid>
         <Grid xs={4} item>
           <TagsBlock items={tags.items} isLoading={isTagsLoading} />
-          <CommentsBlock
+          {/* <CommentsBlock
             items={[
               {
                 user: {
@@ -99,7 +109,7 @@ export const Home = () => {
               },
             ]}
             isLoading={false}
-          />
+          /> */}
         </Grid>
       </Grid>
     </>
