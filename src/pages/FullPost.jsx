@@ -68,6 +68,7 @@ export const FullPost = () => {
           title={data.title}
           imageUrl={data.imageUrl ? `${process.env.REACT_APP_API_URL}${data.imageUrl}` : ''}
           // imageUrl={data.imageUrl ? `http://localhost:3003${data.imageUrl}` : ''}
+          // imageUrl={data.imageUrl ? `https://news-blog-backend.vercel.app${data.imageUrl}` : ''}
           author={data.author}
           createdAt={data.createdAt}
           viewsCount={data.viewCount}

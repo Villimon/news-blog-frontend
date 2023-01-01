@@ -36,6 +36,7 @@ export const HomeByTag = () => {
                 title={post.title}
                 imageUrl={post.imageUrl ? `${process.env.REACT_APP_API_URL}${post.imageUrl}` : ''}
                 // imageUrl={post.imageUrl ? `http://localhost:3003${post.imageUrl}` : ''}
+                // imageUrl={post.imageUrl ? `https://news-blog-backend.vercel.app${post.imageUrl}` : ''}
                 author={post.author}
                 createdAt={post.createdAt}
                 viewsCount={post.viewCount}
